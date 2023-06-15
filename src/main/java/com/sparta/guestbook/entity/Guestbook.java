@@ -1,5 +1,7 @@
 package com.sparta.guestbook.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.sparta.guestbook.dto.GuestbookRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +17,16 @@ public class Guestbook {
     private String username;
     private String contents;
     private String title;
-    private String createdDatetime;
     private Long password;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdDatetime = LocalDateTime.now();
 
     public Guestbook(GuestbookRequestDto requestDto){
         this.title = requestDto.getTitle();
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
+        this.createdDatetime = requestDto.getCreatedDatetime();
     }
 }

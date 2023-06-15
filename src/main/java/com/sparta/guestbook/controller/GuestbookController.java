@@ -5,10 +5,7 @@ import com.sparta.guestbook.dto.GuestbookResponseDto;
 import com.sparta.guestbook.entity.Guestbook;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/guestbook")
