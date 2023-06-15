@@ -29,4 +29,12 @@ public class Guestbook {
         this.password = requestDto.getPassword();
         this.createdDatetime = requestDto.getCreatedDatetime();
     }
+
+    public void update(GuestbookRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.username = requestDto.getUsername();
+        this.contents = requestDto.getContents();
+        this.password = requestDto.getPassword();
+        this.createdDatetime = requestDto.getCreatedDatetime();
+    }
 }

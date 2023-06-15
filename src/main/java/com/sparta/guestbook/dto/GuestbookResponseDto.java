@@ -18,6 +18,7 @@ public class GuestbookResponseDto {
     private LocalDateTime createdDatetime = LocalDateTime.now();
 
     public GuestbookResponseDto(Guestbook guestbook) {
+        this.id = guestbook.getId();
         this.username = guestbook.getUsername();
         this.contents = guestbook.getContents();
         this.title = guestbook.getTitle();

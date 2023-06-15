@@ -37,4 +37,30 @@ public class GuestbookController {
                 .map(GuestbookResponseDto::new).toList();
         return responseDtoList;
     }
+
+    @PutMapping("/contents/{id}")
+    public Long updateContents(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+        // 해당 게시글이 데이터베이스에 존재하는지 확인
+        if (guestbookList.containsKey(id)) {
+            // 해당 게시글 가져오기
+            Guestbook guestbook = guestbookList.get(id);
+
+            // 해당 게시글 수정
+            guestbook.update(requestDto);
+            return guestbook.getId();
+        } else {
+            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
+        }
+    }
+
+    @DeleteMapping("/contents/{id}")
+    public Long deleteContents(@PathVariable Long id) {
+        // 해당 게시글이 데이터베이스에 존재하는지 확인
+        if (guestbookList.containsKey(id)) {
+            guestbookList.remove(id);
+            return id;
+        } else {
+            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
+        }
+    }
 }
