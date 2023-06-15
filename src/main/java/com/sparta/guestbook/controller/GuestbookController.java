@@ -3,18 +3,14 @@ package com.sparta.guestbook.controller;
 import com.sparta.guestbook.dto.GuestbookRequestDto;
 import com.sparta.guestbook.dto.GuestbookResponseDto;
 import com.sparta.guestbook.entity.Guestbook;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/guestbook")
 public class GuestbookController {
     private final Map<Long, Guestbook> guestbookList = new HashMap<>();

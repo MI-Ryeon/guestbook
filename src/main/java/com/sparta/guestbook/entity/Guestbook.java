@@ -15,7 +15,7 @@ public class Guestbook {
     private String username;
     private String contents;
     private String title;
-    private LocalDateTime createdDatetime;
+    private String createdDatetime;
     private Long password;
 
     public Guestbook(GuestbookRequestDto requestDto){
