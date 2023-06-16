@@ -11,10 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class GuestbookController {
-//    private final Map<Long, Guestbook> guestbookList = new HashMap<>();
     private final JdbcTemplate jdbcTemplate;
 
-    public GuestbookController(JdbcTemplate jdbcTemplate){
+    public GuestbookController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -22,8 +21,6 @@ public class GuestbookController {
     public GuestbookResponseDto creatPost(@RequestBody GuestbookRequestDto requestDto) {
         GuestbookService service = new GuestbookService(jdbcTemplate);
         return service.createPost(requestDto);
-
-
     }
 
     @GetMapping("/posts")
@@ -33,12 +30,11 @@ public class GuestbookController {
 
     }
 
-//    @GetMapping("/post/{id}")
-//    public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-//        Guestbook guestbook = guestbookList.get(id);
-//        GuestbookResponseDto responseDto = new GuestbookResponseDto(guestbook);
-//        return responseDto;
-//    }
+    @GetMapping("/post/{id}")
+    public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+        GuestbookService service = new GuestbookService(jdbcTemplate);
+        return service.getPost(id);
+    }
 
     @PutMapping("/post/{id}")
     public Long updatePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
@@ -50,19 +46,5 @@ public class GuestbookController {
     public Long deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
         GuestbookService service = new GuestbookService(jdbcTemplate);
         return service.deletePosts(id, requestDto);
-
-//        if (guestbookList.containsKey(id)) {
-//            if (requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
-//                // 해당 게시글 수정
-//                guestbookList.remove(id);
-//                return "success : true";
-//            } else {
-//                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-//            }
-//        } else {
-//            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
-//        }
     }
-
-
 }
