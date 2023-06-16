@@ -1,31 +1,26 @@
 package com.sparta.guestbook.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.sparta.guestbook.entity.Guestbook;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
-public class GuestbookResponseDto {
+public class GuestbookResponseDto { // 변수 순서대로 출력
     private Long id;
-    private String username;
-    private String contents;
     private String title;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdAt;
-
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime modifiedAt;
+    private String username;
+    private String post;
 
     public GuestbookResponseDto(Guestbook guestbook) {
         this.id = guestbook.getId();
-        this.username = guestbook.getUsername();
-        this.contents = guestbook.getContents();
         this.title = guestbook.getTitle();
-        this.createdAt = guestbook.getCreateAt();
-        this.modifiedAt = guestbook.getModifiedAt();
+        this.username = guestbook.getUsername();
+        this.post = guestbook.getPost();
+    }
+
+    public GuestbookResponseDto(Long id, String title, String username, String post, Long password) {
+        this.id =id;
+        this.title = title;
+        this.username = username;
+        this.post = post;
     }
 }
