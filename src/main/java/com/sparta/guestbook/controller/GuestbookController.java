@@ -3,9 +3,9 @@ package com.sparta.guestbook.controller;
 import com.sparta.guestbook.dto.GuestbookRequestDto;
 import com.sparta.guestbook.dto.GuestbookResponseDto;
 import com.sparta.guestbook.entity.Guestbook;
+import com.sparta.guestbook.service.GuestbookService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,70 +15,33 @@ import java.util.Map;
 public class GuestbookController {
     private final Map<Long, Guestbook> guestbookList = new HashMap<>();
 
-    @PostMapping("/post")
+    @PostMapping("/post") // 게시글 작성
     public GuestbookResponseDto creatPost(@RequestBody GuestbookRequestDto requestDto) {
-        // RequestDtd -> Entity
-        Guestbook guestbook = new Guestbook(requestDto);
-
-        // Guestbook Max ID check
-        Long maxId = guestbookList.size() > 0 ? Collections.max(guestbookList.keySet()) + 1 : 1;
-        guestbook.setId(maxId);
-
-        // DB 저장
-        guestbookList.put(guestbook.getId(), guestbook);
-
-        // Entity -> ResponseDto
-        GuestbookResponseDto responseDto = new GuestbookResponseDto(guestbook);
-
-        return responseDto;
+        GuestbookService service = new GuestbookService();
+        return service.createPost(requestDto);
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/posts") // 게시글 전체 조회
     public List<GuestbookResponseDto> getPosts() {
-        // Map To List
-        List<GuestbookResponseDto> responseDtoList = guestbookList.values().stream()
-                .map(GuestbookResponseDto::new).toList();
-        return responseDtoList;
+        GuestbookService service = new GuestbookService();
+        return service.getPosts();
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/{id}") // 게시글 1개 조회
     public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        Guestbook guestbook = guestbookList.get(id);
-        GuestbookResponseDto responseDto = new GuestbookResponseDto(guestbook);
-        return responseDto;
+        GuestbookService service = new GuestbookService();
+        return service.getPost(id, requestDto);
     }
 
-    @PutMapping("/post/{id}")
-    public GuestbookRequestDto updateContents(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        // 해당 게시글이 데이터베이스에 존재하는지 확인
-        if (guestbookList.containsKey(id)) {
-            // 해당 게시글 가져오기
-            Guestbook guestbook = guestbookList.get(id);
-            if (requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
-                // 해당 게시글 수정
-                guestbook.update(requestDto);
-                return requestDto;
-            } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
-        }
+    @PutMapping("/post/{id}") // 선택한 게시글 수정
+    public GuestbookRequestDto updatePost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+        GuestbookService service = new GuestbookService();
+        return service.updatePost(id, requestDto);
     }
 
-    @DeleteMapping("/post/{id}")
-    public String deleteContents(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        // 해당 게시글이 데이터베이스에 존재하는지 확인
-        if (guestbookList.containsKey(id)) {
-            if (requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
-                // 해당 게시글 수정
-                guestbookList.remove(id);
-                return "success : true";
-            } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
-        }
+    @DeleteMapping("/post/{id}") // 선택한 게시글 삭제
+    public String deletePost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+        GuestbookService service = new GuestbookService();
+        return service.deletePost(id, requestDto);
     }
 }
