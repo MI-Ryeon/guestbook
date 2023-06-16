@@ -15,13 +15,17 @@ public class GuestbookResponseDto {
     private String title;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdDatetime = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime modifiedAt;
 
     public GuestbookResponseDto(Guestbook guestbook) {
         this.id = guestbook.getId();
         this.username = guestbook.getUsername();
         this.contents = guestbook.getContents();
         this.title = guestbook.getTitle();
-        this.createdDatetime = guestbook.getCreatedDatetime();
+        this.createdAt = guestbook.getCreateAt();
+        this.modifiedAt = guestbook.getModifiedAt();
     }
 }

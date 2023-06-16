@@ -6,6 +6,7 @@ import com.sparta.guestbook.dto.GuestbookRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -20,14 +21,18 @@ public class Guestbook {
     private Long password;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdDatetime = LocalDateTime.now();
+    private LocalDateTime createAt;
 
-    public Guestbook(GuestbookRequestDto requestDto){
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime modifiedAt;
+
+    public Guestbook(GuestbookRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
-        this.createdDatetime = requestDto.getCreatedDatetime();
+        this.createAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
     }
 
     public void update(GuestbookRequestDto requestDto) {
@@ -35,6 +40,6 @@ public class Guestbook {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.password = requestDto.getPassword();
-        this.createdDatetime = requestDto.getCreatedDatetime();
+        this.modifiedAt = LocalDateTime.now();
     }
 }

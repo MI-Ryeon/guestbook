@@ -39,7 +39,7 @@ public class GuestbookController {
     }
 
     @GetMapping("/post/{id}")
-    public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto){
+    public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
         Guestbook guestbook = guestbookList.get(id);
         GuestbookResponseDto responseDto = new GuestbookResponseDto(guestbook);
         return responseDto;
@@ -51,7 +51,7 @@ public class GuestbookController {
         if (guestbookList.containsKey(id)) {
             // 해당 게시글 가져오기
             Guestbook guestbook = guestbookList.get(id);
-            if(requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
+            if (requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
                 // 해당 게시글 수정
                 guestbook.update(requestDto);
                 return requestDto;
@@ -67,7 +67,7 @@ public class GuestbookController {
     public String deleteContents(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
         // 해당 게시글이 데이터베이스에 존재하는지 확인
         if (guestbookList.containsKey(id)) {
-            if(requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
+            if (requestDto.getPassword().equals(guestbookList.get(id).getPassword())) {
                 // 해당 게시글 수정
                 guestbookList.remove(id);
                 return "success : true";

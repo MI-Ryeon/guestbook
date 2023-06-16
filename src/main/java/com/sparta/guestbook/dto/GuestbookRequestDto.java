@@ -14,5 +14,8 @@ public class GuestbookRequestDto {
     private Long password;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdDatetime = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 }
