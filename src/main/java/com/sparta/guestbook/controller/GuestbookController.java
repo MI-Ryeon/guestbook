@@ -3,7 +3,6 @@ package com.sparta.guestbook.controller;
 import com.sparta.guestbook.dto.GuestbookRequestDto;
 import com.sparta.guestbook.dto.GuestbookResponseDto;
 import com.sparta.guestbook.service.GuestbookService;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,40 +10,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class GuestbookController {
-    private final JdbcTemplate jdbcTemplate;
+    private final GuestbookService service;
 
-    public GuestbookController(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public GuestbookController(GuestbookService service) {
+        this.service = service;
     }
 
     @PostMapping("/post")
     public GuestbookResponseDto creatPost(@RequestBody GuestbookRequestDto requestDto) {
-        GuestbookService service = new GuestbookService(jdbcTemplate);
         return service.createPost(requestDto);
     }
 
     @GetMapping("/posts")
     public List<GuestbookResponseDto> getPosts() {
-        GuestbookService service = new GuestbookService(jdbcTemplate);
         return service.getPosts();
 
     }
 
     @GetMapping("/post/{id}")
-    public GuestbookResponseDto getPost(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        GuestbookService service = new GuestbookService(jdbcTemplate);
+    public GuestbookResponseDto getPost(@PathVariable Long id) {
         return service.getPost(id);
     }
 
     @PutMapping("/post/{id}")
-    public Long updatePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        GuestbookService service = new GuestbookService(jdbcTemplate);
+    public GuestbookResponseDto updatePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
         return service.updatePosts(id, requestDto);
     }
 
     @DeleteMapping("/post/{id}")
-    public Long deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        GuestbookService service = new GuestbookService(jdbcTemplate);
-        return service.deletePosts(id, requestDto);
+    public GuestbookResponseDto deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+        service.deletePosts(id, requestDto.getPassword());
+        return new GuestbookResponseDto(true);
     }
 }

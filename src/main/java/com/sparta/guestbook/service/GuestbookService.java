@@ -4,17 +4,17 @@ import com.sparta.guestbook.dto.GuestbookRequestDto;
 import com.sparta.guestbook.dto.GuestbookResponseDto;
 import com.sparta.guestbook.entity.Guestbook;
 import com.sparta.guestbook.repository.GuestbookRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class GuestbookService {
-    private final JdbcTemplate jdbcTemplate;
+    private final GuestbookRepository repository;
 
-    public GuestbookService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public GuestbookService(GuestbookRepository repository) {
+        this.repository = repository;
     }
 
     public GuestbookResponseDto createPost(GuestbookRequestDto requestDto) {
@@ -22,7 +22,6 @@ public class GuestbookService {
         Guestbook guestbook = new Guestbook(requestDto);
 
         // DB 저장
-        GuestbookRepository repository = new GuestbookRepository(jdbcTemplate);
         Guestbook saveBook = repository.save(guestbook);
 
         // Entity -> ResponseDto
@@ -33,46 +32,36 @@ public class GuestbookService {
 
     public List<GuestbookResponseDto> getPosts() {
         // DB 조회
-        GuestbookRepository repository = new GuestbookRepository(jdbcTemplate);
-        return repository.findAll();
+        return repository.findAll().stream().map(GuestbookResponseDto::new).toList();
     }
 
     public GuestbookResponseDto getPost(Long id) {
-        GuestbookRepository repository = new GuestbookRepository(jdbcTemplate);
-        return repository.find(id);
+        Guestbook guestbook = findPost(id);
+        return new GuestbookResponseDto(guestbook);
     }
 
-    public Long updatePosts(Long id, GuestbookRequestDto requestDto) {
-        GuestbookRepository repository = new GuestbookRepository(jdbcTemplate);
+    @Transactional
+    public GuestbookResponseDto updatePosts(Long id, GuestbookRequestDto requestDto) {
         // 해당 게시글이 데이터베이스에 존재하는지 확인
-        Guestbook guestbook = repository.findById(id);
-        if (guestbook != null) {
-            if (repository.checkPassword(id, requestDto)) { // 비밀번호 확인
-                // post 내용 수정
-                repository.update(id, requestDto);
-                return id;
-            } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
-        }
+        Guestbook guestbook = findPost(id);
+        guestbook.checkPassword(requestDto.getPassword());
+
+        guestbook.setTitle(requestDto.getTitle());
+        guestbook.setUsername(requestDto.getUsername());
+        guestbook.setPost(requestDto.getPost());
+
+        return new GuestbookResponseDto(guestbook);
     }
 
-    public Long deletePosts(Long id, GuestbookRequestDto requestDto) {
-        GuestbookRepository repository = new GuestbookRepository(jdbcTemplate);
+    public void deletePosts(Long id, String inputPassword) {
         // 해당 게시글이 데이터베이스에 존재하는지 확인
-        Guestbook guestbook = repository.findById(id);
-        if (guestbook != null) {
-            if (repository.checkPassword(id, requestDto)) { // 비밀번호 확인
-                // 해당 게시글 삭제
-                repository.delete(id);
-                return id;
-            } else {
-                throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.");
-        }
+        Guestbook guestbook = findPost(id);
+        guestbook.checkPassword(inputPassword);
+        repository.delete(guestbook);
+    }
+
+    private Guestbook findPost(Long id) {
+        return repository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")); // Optional
     }
 }

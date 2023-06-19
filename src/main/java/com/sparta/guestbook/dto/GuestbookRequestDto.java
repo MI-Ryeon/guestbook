@@ -7,5 +7,5 @@ public class GuestbookRequestDto {
     private String title;
     private String username;
     private String post;
-    private Long password;
+    private String password;
 }
