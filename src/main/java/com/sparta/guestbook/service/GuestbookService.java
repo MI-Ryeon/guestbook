@@ -32,7 +32,7 @@ public class GuestbookService {
 
     public List<GuestbookResponseDto> getPosts() {
         // DB 조회
-        return repository.findAll().stream().map(GuestbookResponseDto::new).toList();
+        return repository.findAllByOrderByCreateAtDesc().stream().map(GuestbookResponseDto::new).toList();
     }
 
     public GuestbookResponseDto getPost(Long id) {
