@@ -3,11 +3,12 @@ package com.sparta.guestbook.controller;
 import com.sparta.guestbook.dto.SignupRequestDto;
 import com.sparta.guestbook.dto.UserResponseDto;
 import com.sparta.guestbook.service.UserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
     private final UserService userService;
@@ -17,7 +18,7 @@ public class UserController {
     }
 
     @PostMapping("/auth/signup")
-    public UserResponseDto signup(SignupRequestDto requestDto) {
+    public UserResponseDto signup(@RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
         return new UserResponseDto("회원가입 성공", "200");
     }
