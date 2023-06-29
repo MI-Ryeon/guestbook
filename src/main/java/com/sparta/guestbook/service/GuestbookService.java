@@ -17,7 +17,6 @@ public class GuestbookService {
         this.repository = repository;
     }
 
-    @Transactional
     public GuestbookResponseDto createPost(GuestbookRequestDto requestDto) {
         // RequestDtd -> Entity
         Guestbook guestbook = new Guestbook(requestDto);
@@ -41,7 +40,6 @@ public class GuestbookService {
         return new GuestbookResponseDto(guestbook);
     }
 
-    @Transactional
     public GuestbookResponseDto updatePosts(Long id, GuestbookRequestDto requestDto) {
         // 해당 게시글이 데이터베이스에 존재하는지 확인
         Guestbook guestbook = findPost(id);
