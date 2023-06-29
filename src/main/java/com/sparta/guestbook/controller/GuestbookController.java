@@ -38,8 +38,7 @@ public class GuestbookController {
     }
 
     @DeleteMapping("/post/{id}")
-    public GuestbookResponseDto deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
+    public void deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
         service.deletePosts(id, requestDto.getPassword());
-        return new GuestbookResponseDto(true);
     }
 }
