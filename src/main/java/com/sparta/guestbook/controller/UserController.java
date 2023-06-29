@@ -1,8 +1,10 @@
 package com.sparta.guestbook.controller;
 
+import com.sparta.guestbook.dto.LoginRequestDto;
 import com.sparta.guestbook.dto.SignupRequestDto;
 import com.sparta.guestbook.dto.UserResponseDto;
 import com.sparta.guestbook.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +25,13 @@ public class UserController {
         return new UserResponseDto("회원가입 성공", "200");
     }
 
-//    @PostMapping("/login")
-//    public UserResponseDto login(SignupRequestDto requestDto) {
-//        userService.login(requestDto);
-//        return new UserResponseDto("로그인 성공", "200");
-//    }
+    @PostMapping("/auth/login")
+    public UserResponseDto login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
+        try {
+            userService.login(requestDto, res);
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return new UserResponseDto("로그인 성공", "200");
+    }
 }
