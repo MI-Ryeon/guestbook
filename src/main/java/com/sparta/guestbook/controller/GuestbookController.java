@@ -2,7 +2,9 @@ package com.sparta.guestbook.controller;
 
 import com.sparta.guestbook.dto.GuestbookRequestDto;
 import com.sparta.guestbook.dto.GuestbookResponseDto;
+import com.sparta.guestbook.security.UserDetailsImpl;
 import com.sparta.guestbook.service.GuestbookService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +40,8 @@ public class GuestbookController {
     }
 
     @DeleteMapping("/post/{id}")
-    public GuestbookResponseDto deletePosts(@PathVariable Long id, @RequestBody GuestbookRequestDto requestDto) {
-        service.deletePosts(id, requestDto.getPassword());
+    public GuestbookResponseDto deletePosts(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        service.deletePosts(id, userDetails.getPassword());
         return new GuestbookResponseDto(true);
     }
 }
